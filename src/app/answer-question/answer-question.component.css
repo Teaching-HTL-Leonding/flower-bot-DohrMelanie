@@ -1,0 +1,25 @@
+form label {
+  display: block; /* linebreak after label */
+  margin: 0.5rem 0;
+}
+
+form button {
+  margin-left: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color:indianred;
+  color: white;
+  border-style:solid;
+  border-color:firebrick;
+  cursor: pointer;
+  border-radius: 5px;
+  border-width: 4px;
+}
+
+form div {
+  display: flex; /* for div input */
+}
+
+form div input {
+  flex: 1; /* input takes up all available space */
+  padding: 0.5rem;
+}
