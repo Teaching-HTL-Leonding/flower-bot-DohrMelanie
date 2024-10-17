@@ -17,11 +17,9 @@ export class AnswerQuestionComponent {
   private readonly openAIService = inject(OpenAIService);
 
   async answerQuestion() {
+    console.log(this.openAIService.systemPrompt);
     await this.openAIService.answerQuestion(this.question());
     this.conversation.set(this.openAIService.conversation);
-
-    console.log(this.conversation().length);
-    console.log(this.conversation.length);
   }
 
   startOver() {

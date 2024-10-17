@@ -22,10 +22,12 @@ export type OpenAIResponse = {
 export class OpenAIService {
   private httpClient = inject(HttpClient);
   conversation: string[] = [];
+  systemPrompt: string = 'Answer sarcasticly and slightly insulting' //like a pirate parrot 🦜🏴‍☠️',
 
   constructor() { }
 
   async answerQuestion(question: string): Promise<OpenAIResponse> {
+    console.log(this.systemPrompt);
     if (question.length === 0) {
       return {
         choices: [
@@ -50,7 +52,7 @@ export class OpenAIService {
           messages: [
             {
               role: 'system',
-              content: 'Answer sarcasticly and slightly insulting' //like a pirate parrot 🦜🏴‍☠️',
+              content: this.systemPrompt,
             },
             {
               role: 'user',
@@ -61,8 +63,10 @@ export class OpenAIService {
       )
     );
     this.conversation.push(answer.choices[0].message.content);
-    console.log(this.conversation);
-    console.log(answer);
     return answer;
+  }
+
+  async updateSystemPrompt(prompt: string): Promise<void> {
+    this.systemPrompt = prompt;
   }
 }
