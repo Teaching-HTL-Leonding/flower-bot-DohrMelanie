@@ -1,1 +1,10 @@
-<p>order-summary works!</p>
+<h2>Order Summary</h2>
+
+@for (bouquet of this.order().properties.bouquets; track $index) {
+  <div>
+    <p>Bouquet {{ $index + 1 }}</p>
+    <p>Size: {{ bouquet.size }}</p>
+    <p>Flowers: {{ this.formatFlowers(bouquet.flowers) }}</p>
+  </div>
+}
+

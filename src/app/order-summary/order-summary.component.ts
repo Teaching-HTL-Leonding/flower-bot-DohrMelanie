@@ -22,4 +22,7 @@ export class OrderSummaryComponent {
   ngOnInit() {
     console.log(this.order());
   }
+  formatFlowers(flowers: any[]) {
+    return flowers.map((flower: any) => `${flower.type} (${flower.color}) - ${flower.quantity}`).join(', ');
+  }
 }
