@@ -21,9 +21,30 @@ export type OpenAIResponse = {
 })
 export class OpenAIService {
   private httpClient = inject(HttpClient);
+  conversation: string[] = [];
+
   constructor() { }
-  answerQuestion(question: string): Promise<OpenAIResponse> {
-    return firstValueFrom(
+
+  async answerQuestion(question: string): Promise<OpenAIResponse> {
+    if (question.length === 0) {
+      return {
+        choices: [
+          {
+            message: {
+              role: 'system',
+              content: 'Please ask a question first.'
+            }
+          }
+        ],
+        usage: {
+          prompt_tokens: 0,
+          completion_tokens: 0,
+          total_tokens: 0
+        }
+      };
+    }
+    this.conversation.push(question);
+    let answer: OpenAIResponse = await firstValueFrom(
       this.httpClient.post<OpenAIResponse>(
         'http://localhost:3000/openai/deployments/gpt-4o-mini/chat/completions', {
           messages: [
@@ -33,10 +54,15 @@ export class OpenAIService {
             },
             {
               role: 'user',
-              content: question,
+              content: this.conversation.join('\n'),
             }
           ]
-      })
-    )
+        }
+      )
+    );
+    this.conversation.push(answer.choices[0].message.content);
+    console.log(this.conversation);
+    console.log(answer);
+    return answer;
   }
 }

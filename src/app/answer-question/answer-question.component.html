@@ -2,7 +2,7 @@
 
 <form (submit)="answerQuestion()">
   <label for="question">Question</label>
-  <div>
+  <div class="input">
     <input type="text" list="suggestions" id="question" name="question"
     placeholder="Enter your question here" [(ngModel)]="question"/>
     <datalist  id="suggestions">
@@ -10,9 +10,23 @@
       <option>Give me a checklist for a good body-weight training</option>
       <option>What should I view as a tourist in Vienna?</option>
     </datalist>
-    <button type="submit">Answer</button>
+    @if(this.conversation().length > 20) {
+      <button (click)="startOver()">Start over!</button>
+    } @else {
+      <button type="submit">Answer</button>
+    }
   </div>
-
 </form>
 
-<markdown [data]="answer()"></markdown>
+
+@for (item of this.conversation(); track $index) {
+  @if($index % 2 === 0) {
+    <div class="human">
+      <markdown [data]="item"></markdown>
+    </div>
+  } @else {
+    <div class="ai">
+      <markdown [data]="item"></markdown>
+    </div>
+  }
+}

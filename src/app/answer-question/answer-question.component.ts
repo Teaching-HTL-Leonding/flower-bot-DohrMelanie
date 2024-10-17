@@ -11,13 +11,21 @@ import { MarkdownModule } from 'ngx-markdown';
   styleUrl: './answer-question.component.css'
 })
 export class AnswerQuestionComponent {
-  answer = signal('');
   question = signal('');
+  conversation = signal<string[]>([]);
 
   private readonly openAIService = inject(OpenAIService);
 
   async answerQuestion() {
-    const response = await this.openAIService.answerQuestion(this.question());
-    this.answer.set(response.choices[0].message.content);
+    await this.openAIService.answerQuestion(this.question());
+    this.conversation.set(this.openAIService.conversation);
+
+    console.log(this.conversation().length);
+    console.log(this.conversation.length);
+  }
+
+  startOver() {
+    this.openAIService.conversation = [];
+    this.conversation.set([]);
   }
 }
