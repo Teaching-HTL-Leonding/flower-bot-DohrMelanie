@@ -1,0 +1,32 @@
+<h2>Answer Question</h2>
+
+<form (submit)="answerQuestion()">
+  <label for="question">Question</label>
+  <div>
+    <input type="text" list="suggestions" id="question" name="question"
+    placeholder="Enter your question here" [(ngModel)]="question"/>
+    <datalist  id="suggestions">
+      <option>What bouquet price options are there?</option>
+      <option>What flowers are optimal for a funeral?</option>
+      <option>Make me a small flower bouquet for a wedding with pink flowers (i do not care about details like flower types) and order it now!</option>
+    </datalist>
+    @if(this.conversation().length > 20) {
+      <button (click)="startOver()">Start over!</button>
+    } @else {
+      <button type="submit">Answer</button>
+    }
+  </div>
+</form>
+
+
+@for (item of this.conversation(); track $index) {
+  @if($index % 2 === 0) {
+    <div class="human">
+      <markdown [data]="item"></markdown>
+    </div>
+  } @else {
+    <div class="ai">
+      <markdown [data]="item"></markdown>
+    </div>
+  }
+}
