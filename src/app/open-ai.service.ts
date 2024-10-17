@@ -28,7 +28,64 @@ export class OpenAIService {
   If the customer is not sure which flowers they want, you must ask questions to understand the occasion, their favorite colors, or other preferences, and the suggest bouquests accordingly.
   Respond in the language of the user, greet warmly, and always mention this: "Let flowers draw a smile on your face".
   Offers: Rose (red, yellow, purple), Lily (yellow, pink, white), Gerbera (pink, red, yellow), Freesia (white, pink, red, yellow), Tulips (red, yellow, purple), Sunflowers (yellow)
-  Pricing: Small Bouquet (15 EUR, 3 flowers with little greenery), Medium Bouquet (25 EUR, 5 flowers with larger green leaves for decoration), Large Bouquet (35 EUR, 10 flowers artistically arranged with greenery and filler flowers)`;
+  Pricing: Small Bouquet (15 EUR, 3 flowers with little greenery), Medium Bouquet (25 EUR, 5 flowers with larger green leaves for decoration), Large Bouquet (35 EUR, 10 flowers artistically arranged with greenery and filler flowers)
+  When the customer orders the bouquet, you should generate a JSON object and sent just it with a leading { with the bouquet details that looks like this:
+  {
+    schema: "http://json-schema.org/draft-07/schema#",
+    title: "Flower Shop Order",
+    type: "object",
+    properties: {
+      bouquets: {
+          type: "array",
+          description: "List of bouquets ordered by the customer",
+          items: {
+            type: "object",
+            properties: {
+              size: {
+                type: "string",
+                enum: ["small", "medium", "large"],
+                description: "Size of the bouquet"
+              },
+              flowers: {
+                type: "array",
+                description: "List of flowers in the bouquet",
+                items: {
+                  type: "object",
+                  properties: {
+                    type: {
+                      type: "string",
+                      enum: ["rose", "lily", "gerbera", "freesia", "tulip", "sunflower"],
+                      description: "Type of flower."
+                    },
+                    color: {
+                      type: "string",
+                      enum: ["red", "yellow", "purple", "pink", "white"],
+                      description: "Color of the flower."
+                    },
+                    quantity: {
+                      type: "integer",
+                      description: "Number of this flower in the bouquet."
+                    }
+                  }
+                },
+                additionalProperties: false,
+                required: ["type", "color", "quantity"]
+              }
+            },
+            additionalProperties: false,
+            required: ["size", "flowers"]
+          }
+        },
+        totalPrice: {
+          type: "number",
+          description: "Total price of the order in euros."
+        }
+      },
+      additionalProperties: false,
+      required: ["bouquets", "totalPrice"]
+    }
+  }
+    `;
 
   constructor() { }
 
