@@ -33,7 +33,9 @@ export class OpenAIService {
   constructor() { }
 
   async answerQuestion(question: string): Promise<OpenAIResponse> {
-    console.log(this.systemPrompt);
+    if (localStorage.getItem('systemPrompt')) {
+      this.systemPrompt = localStorage.getItem('systemPrompt')!;
+    }
     if (question.length === 0) {
       return {
         choices: [
@@ -73,6 +75,7 @@ export class OpenAIService {
   }
 
   async updateSystemPrompt(prompt: string): Promise<void> {
+    localStorage.setItem('systemPrompt', prompt);
     this.systemPrompt = prompt;
   }
 }
